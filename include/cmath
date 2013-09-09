@@ -1380,7 +1380,11 @@ using ::log2;
 using ::log2f;
 
 inline _LIBCPP_INLINE_VISIBILITY float       log2(float __x) _NOEXCEPT       {return log2f(__x);}
+#if defined(_NEWLIB_VERSION) // @LOCALMOD-START Missing from newlib. Note that PNaCl represents ``long double`` as ``double``, hence the intrinsic's type.
+inline _LIBCPP_INLINE_VISIBILITY long double log2(long double __x) _NOEXCEPT {return __builtin_log2(__x);}
+#else
 inline _LIBCPP_INLINE_VISIBILITY long double log2(long double __x) _NOEXCEPT {return log2l(__x);}
+#endif // @LOCALMOD-END
 
 template <class _A1>
 inline _LIBCPP_INLINE_VISIBILITY
@@ -1393,7 +1397,11 @@ using ::logb;
 using ::logbf;
 
 inline _LIBCPP_INLINE_VISIBILITY float       logb(float __x) _NOEXCEPT       {return logbf(__x);}
+#if defined(_NEWLIB_VERSION) // @LOCALMOD-START Missing from newlib. Note that PNaCl represents ``long double`` as ``double``, hence the intrinsic's type.
+inline _LIBCPP_INLINE_VISIBILITY long double logb(long double __x) _NOEXCEPT {return __builtin_logb(__x);}
+#else
 inline _LIBCPP_INLINE_VISIBILITY long double logb(long double __x) _NOEXCEPT {return logbl(__x);}
+#endif // @LOCALMOD-END
 
 template <class _A1>
 inline _LIBCPP_INLINE_VISIBILITY
@@ -1473,6 +1481,15 @@ nextafter(_A1 __x, _A2 __y) _NOEXCEPT
 
 // nexttoward
 
+#if defined(_NEWLIB_VERSION) // @LOCALMOD-START Missing from newlib. Note that PNaCl represents ``long double`` as ``double``, hence the intrinsic's type.
+inline _LIBCPP_INLINE_VISIBILITY float       nexttoward(float __x, long double __y) _NOEXCEPT       {return __builtin_nexttoward(__x, __y);}
+inline _LIBCPP_INLINE_VISIBILITY long double nexttoward(long double __x, long double __y) _NOEXCEPT {return __builtin_nexttoward(__x, __y);}
+
+template <class _A1>
+inline _LIBCPP_INLINE_VISIBILITY
+typename enable_if<is_integral<_A1>::value, double>::type
+nexttoward(_A1 __x, long double __y) _NOEXCEPT {return __builtin_nexttoward((double)__x, __y);}
+#else
 using ::nexttoward;
 using ::nexttowardf;
 
@@ -1483,7 +1500,7 @@ template <class _A1>
 inline _LIBCPP_INLINE_VISIBILITY
 typename enable_if<is_integral<_A1>::value, double>::type
 nexttoward(_A1 __x, long double __y) _NOEXCEPT {return nexttoward((double)__x, __y);}
-
+#endif // @LOCALMOD-END
 // remainder
 
 using ::remainder;
@@ -1656,14 +1673,18 @@ using ::lgammal;
 using ::llrintl;
 using ::llroundl;
 using ::log1pl;
+#if !defined(_NEWLIB_VERSION) // @LOCALMOD-START Missing from newlib.
 using ::log2l;
 using ::logbl;
+#endif // @LOCALMOD-END
 using ::lrintl;
 using ::lroundl;
 using ::nanl;
 using ::nearbyintl;
 using ::nextafterl;
+#if !defined(_NEWLIB_VERSION) // @LOCALMOD-START Missing from newlib.
 using ::nexttowardl;
+#endif // @LOCALMOD-END
 using ::remainderl;
 using ::remquol;
 using ::rintl;

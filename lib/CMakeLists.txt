@@ -1,5 +1,27 @@
 # Get sources
 file(GLOB LIBCXX_SOURCES ../src/*.cpp)
+# @LOCALMOD-START Bake libcxxabi into the libcxx build.
+list(APPEND LIBCXX_SOURCES
+  ../../libcxxabi/src/abort_message.cpp
+  ../../libcxxabi/src/cxa_aux_runtime.cpp
+  ../../libcxxabi/src/cxa_default_handlers.cpp
+  ../../libcxxabi/src/cxa_demangle.cpp
+  ../../libcxxabi/src/cxa_exception.cpp
+  ../../libcxxabi/src/cxa_exception_storage.cpp
+  ../../libcxxabi/src/cxa_guard.cpp
+  ../../libcxxabi/src/cxa_handlers.cpp
+  ../../libcxxabi/src/cxa_new_delete.cpp
+  ../../libcxxabi/src/cxa_personality.cpp
+  ../../libcxxabi/src/cxa_unexpected.cpp
+  ../../libcxxabi/src/cxa_vector.cpp
+  ../../libcxxabi/src/cxa_virtual.cpp
+  ../../libcxxabi/src/exception.cpp
+  ../../libcxxabi/src/private_typeinfo.cpp
+  ../../libcxxabi/src/stdexcept.cpp
+  ../../libcxxabi/src/typeinfo.cpp
+  )
+# @LOCALMOD-END
+
 if(WIN32)
   file(GLOB LIBCXX_WIN32_SOURCES ../src/support/win32/*.cpp)
   list(APPEND LIBCXX_SOURCES ${LIBCXX_WIN32_SOURCES})

@@ -36,6 +36,17 @@
 // lots of noise in the build log, but no bugs that I know of. 
 #pragma clang diagnostic ignored "-Wsign-conversion"
 
+// @LOCALMOD-START Newlib doesn't have the following C extensions for locales.
+#if defined(_NEWLIB_VERSION)
+extern "C" {
+  locale_t duplocale(locale_t) { return NULL; }
+  void freelocale(locale_t) { }
+  locale_t newlocale(int, const char *, locale_t) { return NULL; }
+  locale_t uselocale(locale_t) { return NULL; }
+}
+#endif
+ // @LOCALMOD-END
+
 _LIBCPP_BEGIN_NAMESPACE_STD
 
 #ifdef __cloc_defined
@@ -1003,6 +1014,9 @@ ctype<char>::classic_table()  _NOEXCEPT
 // going to end up dereferencing it later...
 #elif defined(EMSCRIPTEN)
     return *__ctype_b_loc();
+#elif defined(_NEWLIB_VERSION) // @LOCALMOD-START
+    return 0; // TODO(jfb) This is wrong.
+    // @LOCALMOD-END
 #else
     // Platform not supported: abort so the person doing the port knows what to
     // fix
