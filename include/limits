@@ -233,7 +233,7 @@ protected:
     static _LIBCPP_CONSTEXPR const bool is_bounded = true;
     static _LIBCPP_CONSTEXPR const bool is_modulo = true;
 
-#if __i386__ || __x86_64__
+#if __i386__ || __x86_64__ || defined(__pnacl__) // @LOCALMOD
     static _LIBCPP_CONSTEXPR const bool traps = true;
 #else
     static _LIBCPP_CONSTEXPR const bool traps = false;

@@ -1015,7 +1015,8 @@ ctype<char>::classic_table()  _NOEXCEPT
 #elif defined(EMSCRIPTEN)
     return *__ctype_b_loc();
 #elif defined(_NEWLIB_VERSION) // @LOCALMOD-START
-    return 0; // TODO(jfb) This is wrong.
+    // Newlib has a 257-entry table in ctype_.c, where (char)0 starts at [1].
+    return _ctype_ + 1;
     // @LOCALMOD-END
 #else
     // Platform not supported: abort so the person doing the port knows what to

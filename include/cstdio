@@ -165,8 +165,11 @@ using ::fseek;
 using ::fsetpos;
 using ::ftell;
 using ::rewind;
+#undef clearerr // @LOCALMOD
 using ::clearerr;
+#undef feof // @LOCALMOD
 using ::feof;
+#undef ferror // @LOCALMOD
 using ::ferror;
 using ::perror;
 

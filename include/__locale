@@ -429,6 +429,21 @@ public:
     static const mask punct  = _ISPUNCT;
     static const mask xdigit = _ISXDIGIT;
     static const mask blank  = _ISBLANK;
+// @LOCALMOD-START
+#elif defined(_NEWLIB_VERSION)
+    typedef char mask; // Same type as Newlib's _ctype_ array in ctype.h.
+    // Defined in Newlib's ctype.h.
+    static const mask space  = _S;
+    static const mask print  = _P | _U | _L | _N | _B;
+    static const mask cntrl  = _C;
+    static const mask upper  = _U;
+    static const mask lower  = _L;
+    static const mask alpha  = _U | _L;
+    static const mask digit  = _N;
+    static const mask punct  = _P;
+    static const mask xdigit = _X | _N;
+    static const mask blank  = _B;
+// @LOCALMOD-END
 #else  // __GLIBC__ || _WIN32 || __APPLE__ || __FreeBSD__ || EMSCRIPTEN || __sun__
     typedef unsigned long mask;
     static const mask space  = 1<<0;
