@@ -166,7 +166,15 @@ elseif (NOT "${LIBCXX_CXX_ABI}" STREQUAL "none")
 endif ()
 
 # Configure compiler.
-include(config-ix)
+# @LOCALMOD-START Use a custom compiler config because cmake try_compile always
+# tries to link an executable and linking doesnt work during bootstrap without
+# libnacl.
+if ("${CMAKE_C_COMPILER}" MATCHES "pnacl-*")
+  include(config-ix-pnacl)
+else()
+  include(config-ix)
+endif()
+# @LOCALMOD-END
 
 #===============================================================================
 # Setup Compiler Flags
