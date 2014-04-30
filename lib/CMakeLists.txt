@@ -1,9 +1,19 @@
 # Get sources
 file(GLOB LIBCXX_SOURCES ../src/*.cpp)
 
-# @LOCALMOD-START Bake libcxxabi into the libcxx build.
+# @LOCALMOD-START Bake libcxxabi into the libcxx build except on Mac, where
+# we use the system libcxxabi. When we do this, also don't link against
+# libcxxabi when building shared libraries.
 file(GLOB LIBCXXABI_SOURCES ../../libcxxabi/src/*.cpp)
-list(APPEND LIBCXX_SOURCES ${LIBCXXABI_SOURCES})
+file(GLOB PNACL_EH_SUPPORT ../../libcxxabi/src/cxa_pnacl_sjlj_exception.cpp)
+if ( NOT CMAKE_SYSTEM_NAME STREQUAL "nacl" )
+  # Don't include pnacl EH support for non-nacl builds.
+  list(REMOVE_ITEM LIBCXXABI_SOURCES ${PNACL_EH_SUPPORT})
+endif()
+if (NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin" )
+  list(APPEND LIBCXX_SOURCES ${LIBCXXABI_SOURCES})
+  set(LIBCXX_CXX_ABI_LIBRARIES)
+endif()
 # @LOCALMOD-END
 
 if(WIN32)
