@@ -18,16 +18,6 @@
 
 #if _LIBCPP_STD_VER > 11
 
-void both_ways ( const char *p ) {
-	std::string str(p);
-	auto q = std::quoted(s);
-
-    std::stringstream ss;
-    bool skippingws = is_skipws ( &ss );
-	ss << q;
-	ss >> q;
-    }
-
 bool is_skipws ( const std::istream *is ) {
     return ( is->flags() & std::ios_base::skipws ) != 0;
     }
@@ -35,6 +25,16 @@ bool is_skipws ( const std::istream *is ) {
 
 bool is_skipws ( const std::wistream *is ) {
     return ( is->flags() & std::ios_base::skipws ) != 0;
+    }
+
+void both_ways ( const char *p ) {
+    std::string str(p);
+    auto q = std::quoted(str);
+
+    std::stringstream ss;
+    bool skippingws = is_skipws ( &ss );
+    ss << q;
+    ss >> q;
     }
 
 void round_trip ( const char *p ) {
@@ -90,6 +90,20 @@ std::string unquote ( const char *p, char delim='"', char escape='\\' ) {
     std::string s;
     ss >> std::quoted(s, delim, escape);
     return s;
+}
+
+void test_padding () {
+    {
+    std::stringstream ss;
+    ss << std::left << std::setw(10) << std::setfill('!') << std::quoted("abc", '`');
+    assert ( ss.str() == "`abc`!!!!!" );
+    }
+    
+    {
+    std::stringstream ss;
+    ss << std::right << std::setw(10) << std::setfill('!') << std::quoted("abc", '`');
+    assert ( ss.str() == "!!!!!`abc`" );
+    }
 }
 
 
@@ -197,6 +211,7 @@ int main()
 
     assert ( unquote (  "" ) ==  "" ); // nothing there
     assert ( unquote ( L"" ) == L"" ); // nothing there
+    test_padding ();
     }
 
 #else

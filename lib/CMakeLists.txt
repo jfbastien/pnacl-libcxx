@@ -48,7 +48,7 @@ else()
 endif()
 
 if (DEFINED LIBCXX_CXX_ABI_DEPS)
-  add_dependencies(cxx ${LIBCXX_CXX_ABI_DEPS})
+  add_dependencies(cxx LIBCXX_CXX_ABI_DEPS)
 endif()
 
 # Generate library list.
@@ -112,6 +112,6 @@ set_target_properties(cxx
   )
 
 install(TARGETS cxx
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX}
+  ARCHIVE DESTINATION lib${LLVM_LIBDIR_SUFFIX}
   )
