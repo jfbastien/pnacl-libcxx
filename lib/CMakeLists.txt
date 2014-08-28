@@ -10,10 +10,8 @@ if ( NOT CMAKE_SYSTEM_NAME STREQUAL "nacl" )
   # Don't include pnacl EH support for non-nacl builds.
   list(REMOVE_ITEM LIBCXXABI_SOURCES ${PNACL_EH_SUPPORT})
 endif()
-if (NOT CMAKE_SYSTEM_NAME STREQUAL "Darwin" )
   list(APPEND LIBCXX_SOURCES ${LIBCXXABI_SOURCES})
   set(LIBCXX_CXX_ABI_LIBRARIES)
-endif()
 # @LOCALMOD-END
 
 if(WIN32)
@@ -65,7 +63,16 @@ target_link_libraries(cxx ${libraries})
 append_if(compile_flags LIBCXX_HAS_FPIC_FLAG -fPIC)
 append_if(link_flags LIBCXX_HAS_NODEFAULTLIBS_FLAG -nodefaultlibs)
 
-if ( APPLE )
+# @LOCALMOD-START
+if (CMAKE_SYSTEM_NAME STREQUAL "Darwin"  )
+# Do not re-export libc++abi symbols, since they do not come from another dylib
+list(APPEND link_flags
+    "-Wl,-unexported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/libc++unexp.exp"
+    "-Wl,-force_symbols_not_weak_list,${CMAKE_CURRENT_SOURCE_DIR}/notweak.exp"
+    "-Wl,-force_symbols_weak_list,${CMAKE_CURRENT_SOURCE_DIR}/weak.exp")
+endif()
+
+if ( False ) # @LOCALMOD-END
   if ( CMAKE_OSX_DEPLOYMENT_TARGET STREQUAL "10.6" )
     list(APPEND compile_flags "-U__STRICT_ANSI__")
     list(APPEND link_flags
