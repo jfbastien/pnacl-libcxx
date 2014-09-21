@@ -180,7 +180,7 @@ endif ()
 # @LOCALMOD-START Use a custom compiler config because cmake try_compile always
 # tries to link an executable and linking doesnt work during bootstrap without
 # libnacl.
-if ("${CMAKE_C_COMPILER}" MATCHES "pnacl-*")
+if (CMAKE_SYSTEM_NAME STREQUAL "nacl")
   include(config-ix-pnacl)
 else()
   include(config-ix)
