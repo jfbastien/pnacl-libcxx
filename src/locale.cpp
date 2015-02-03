@@ -7,8 +7,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-#define _LIBCPP_EXTERN_TEMPLATE(...) extern template __VA_ARGS__;
-
 // On Solaris, we need to define something to make the C99 parts of localeconv
 // visible.
 #ifdef __sun__
@@ -41,17 +39,6 @@
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wsign-conversion"
 #endif
-
-// @LOCALMOD-START Newlib doesn't have the following C extensions for locales.
-#if defined(_NEWLIB_VERSION)
-extern "C" {
-  locale_t duplocale(locale_t) { return NULL; }
-  void freelocale(locale_t) { }
-  locale_t newlocale(int, const char *, locale_t) { return NULL; }
-  locale_t uselocale(locale_t) { return NULL; }
-}
-#endif
- // @LOCALMOD-END
 
 _LIBCPP_BEGIN_NAMESPACE_STD
 

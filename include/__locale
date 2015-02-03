@@ -29,74 +29,23 @@
 # if __ANDROID_API__ <= 20
 #  include <support/android/locale_bionic.h>
 # endif
+#elif defined(__sun__)
+# include <support/solaris/xlocale.h>
+// @LOCALMOD-START
+#elif defined(_NEWLIB_VERSION)
+// FIXME: replace all the uses of _NEWLIB_VERSION with __NEWLIB__ preceded by an
+// include of <sys/cdefs.h> once https://sourceware.org/ml/newlib-cvs/2014-q3/msg00038.html
+// has had a chance to bake for a bit.
+#include <support/newlib/xlocale.h>
+// @LOCALMOD-END
 #elif (defined(__GLIBC__) || defined(__APPLE__)      || defined(__FreeBSD__) \
-    || defined(__sun__)   || defined(__EMSCRIPTEN__) || defined(__IBMCPP__))
+    || defined(__EMSCRIPTEN__) || defined(__IBMCPP__))
 # include <xlocale.h>
 #endif // __GLIBC__ || __APPLE__ || __FreeBSD__ || __sun__ || __EMSCRIPTEN__ || __IBMCPP__
 
 #if !defined(_LIBCPP_HAS_NO_PRAGMA_SYSTEM_HEADER)
 #pragma GCC system_header
 #endif
-
-// @LOCALMOD-START Newlib doesn't have the following C extensions for
-//                 locales. This probably shouldn't rely on
-//                 _NEWLIB_VERSION: lack of locale_t support could
-//                 instead be detected at configuration time.
-#if defined(_NEWLIB_VERSION)
-typedef void *locale_t;
-extern "C" locale_t duplocale(locale_t);
-extern "C" void freelocale(locale_t);
-extern "C" locale_t newlocale(int, const char *, locale_t);
-extern "C" locale_t uselocale(locale_t);
-#define LC_COLLATE_MASK (1 << LC_COLLATE)
-#define LC_CTYPE_MASK (1 << LC_CTYPE)
-#define LC_MESSAGES_MASK (1 << LC_MESSAGES)
-#define LC_MONETARY_MASK (1 << LC_MONETARY)
-#define LC_NUMERIC_MASK (1 << LC_NUMERIC)
-#define LC_TIME_MASK (1 << LC_TIME)
-#define LC_ALL_MASK (LC_COLLATE_MASK | LC_CTYPE_MASK | LC_MESSAGES_MASK | \
-                     LC_MONETARY_MASK | LC_NUMERIC_MASK | LC_TIME_MASK)
-#define isxdigit_l(a, L) (((void) L), isxdigit(a))
-#define iswxdigit_l(a, L) (((void) L), iswxdigit(a))
-#define isdigit_l(a, L) (((void) L), isdigit(a))
-#define iswdigit_l(a, L) (((void) L), iswdigit(a))
-#define iswcntrl_l(a, L) (((void) L), iswcntrl(a))
-#define iswcntrl_l(a, L) (((void) L), iswcntrl(a))
-#define isalpha_l(a, L) (((void) L), isalpha(a))
-#define iswalpha_l(a, L) (((void) L), iswalpha(a))
-#define ispunct_l(a, L) (((void) L), ispunct(a))
-#define iswpunct_l(a, L) (((void) L), iswpunct(a))
-#define isblank_l(a, L) (((void) L), isblank(a))
-#define iswblank_l(a, L) (((void) L), iswblank(a))
-#define isspace_l(a, L) (((void) L), isspace(a))
-#define iswspace_l(a, L) (((void) L), iswspace(a))
-#define isprint_l(a, L) (((void) L), isprint(a))
-#define iswprint_l(a, L) (((void) L), iswprint(a))
-#define islower_l(a, L) (((void) L), islower(a))
-#define iswlower_l(a, L) (((void) L), iswlower(a))
-#define isupper_l(a, L) (((void) L), isupper(a))
-#define iswupper_l(a, L) (((void) L), iswupper(a))
-#define tolower_l(a, L) (((void) L), tolower(a))
-#define towlower_l(a, L) (((void) L), towlower(a))
-#define toupper_l(a, L) (((void) L), toupper(a))
-#define towupper_l(a, L) (((void) L), towupper(a))
-#define strftime_l(a, b, c, d, L) (((void) L), strftime(a, b, c, d))
-#define strtoll_l(a, b, c, L) (((void) L), strtoll(a, b, c))
-#define strtoull_l(a, b, c, L) (((void) L), strtoull(a, b, c))
-#define strtold_l(a, b, L) (((void) L), strtold(a, b))
-#define strcoll_l(a, b, L) (((void) L), strcoll(a, b))
-#define wstrcoll_l(a, b, L) (((void) L), wstrcoll(a, b))
-#define cscoll_l(a, b, L) (((void) L), cscoll(a, b))
-#define wcscoll_l(a, b, L) (((void) L), wcscoll(a, b))
-#define strxfrm_l(a, b, c, L) (((void) L), strxfrm(a, b, c))
-#define wstrxfrm_l(a, b, c, L) (((void) L), wstrxfrm(a, b, c))
-#define csxfrm_l(a, b, c, L) (((void) L), csxfrm(a, b, c))
-#define wcsxfrm_l(a, b, c, L) (((void) L), wcsxfrm(a, b, c))
-#define sscanf_l(a, b, L, ...) (((void) L), sscanf(a, b, ##__VA_ARGS__))
-#define snprintf_l(a, b, L, c, ...) (((void) L), snprintf(a, b, c, ##__VA_ARGS__))
-#define asprintf_l(a, L, b, ...) (((void) L), asprintf(a, b, ##__VA_ARGS__))
-#endif
- // @LOCALMOD-END
 
 _LIBCPP_BEGIN_NAMESPACE_STD
 

@@ -7,6 +7,7 @@
 #                  https://code.google.com/p/nativeclient/issues/detail?id=3661
 
 set(LIBCXX_HAS_STDCXX0X_FLAG 1)
+set(LIBCXX_HAS_STDCXX11_FLAG 1)
 set(LIBCXX_HAS_FPIC_FLAG 0) # Not quite true, but untested in PNaCl.
 set(LIBCXX_HAS_NODEFAULTLIBS_FLAG 1)
 set(LIBCXX_HAS_NOSTDINCXX_FLAG 1)

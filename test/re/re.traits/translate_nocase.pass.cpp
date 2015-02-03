@@ -14,8 +14,13 @@
 
 // charT translate_nocase(charT c) const;
 
+// REQUIRES: locale.en_US.UTF-8
+
 // XFAIL: with_system_lib=x86_64-apple-darwin11
 // XFAIL: with_system_lib=x86_64-apple-darwin12
+
+// TODO: investigation needed
+// XFAIL: linux-gnu
 
 #include <regex>
 #include <cassert>
