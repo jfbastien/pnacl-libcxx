@@ -72,10 +72,11 @@ append_if(LIBCXX_LINK_FLAGS LIBCXX_HAS_NODEFAULTLIBS_FLAG -nodefaultlibs)
 
 # @LOCALMOD-START
 if ( CMAKE_SYSTEM_NAME STREQUAL "Darwin" )
-  # Needed to build against OSX 10.6 SDK
-  list(APPEND compile_flags "-U__STRICT_ANSI__")
+  # Needed to build against OSX 10.6 SDK:
+  # http://lists.cs.uiuc.edu/pipermail/cfe-dev/2011-January/012999.html
+  list(APPEND LIBCXX_COMPILE_FLAGS "-U__STRICT_ANSI__")
   # Do not re-export libc++abi symbols since they do not come from another dylib
-  list(APPEND link_flags
+  list(APPEND LIBCXX_LINK_FLAGS
       "-Wl,-unexported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/libc++unexp.exp")
 endif()
 
