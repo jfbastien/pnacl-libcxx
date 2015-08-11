@@ -818,7 +818,7 @@ struct __atomic_base  // false
   // @LOCALMOD-BEGIN The NaCl builtin delays resolution of the lock-free
   //                 property until translation time (time at which the
   //                 actual target is known).
-#if defined (__pnacl__)
+#if defined (__pnacl__) || (defined(__mips__) && defined (__native_client__))
     _LIBCPP_INLINE_VISIBILITY
     bool is_lock_free() const volatile _NOEXCEPT
         {return __nacl_atomic_is_lock_free(sizeof(_Tp), &__a_);}
